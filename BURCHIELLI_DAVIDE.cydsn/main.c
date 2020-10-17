@@ -1,26 +1,25 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
+/* =====================================================================================
+    author: Davide Burchielli
+ * =====================================================================================
 */
+
 #include "project.h"
+#include "RGB_driver.h"
 
 int main(void)
 {
-    CyGlobalIntEnable; /* Enable global interrupts. */
+    CyGlobalIntEnable; // Enable global interrupts
 
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    RGB_Start();    // Start PWM_RG and PWM_B
+ 
+    UART_Start();
+    UART_PutString("Send color intensities or type 'RGB LED Program $$$' to open the GUI \r\n");
+   
+    isr_TIMER_StartEx(Custom_TIMER_ISR); //Start the ISR of the Timer
+    isr_UART_StartEx(Custom_UART_ISR);   //Start the ISR of the UART
 
-    for(;;)
-    {
-        /* Place your application code here. */
-    }
+    for(;;)  // empty infinite loop
+    { }
 }
 
 /* [] END OF FILE */
