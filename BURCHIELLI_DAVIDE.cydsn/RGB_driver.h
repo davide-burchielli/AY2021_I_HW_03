@@ -18,11 +18,12 @@
     
     typedef enum {
                     IDLE,
-                    HEAD, 
-                    R,
+                    HEADER,
+                    R, 
                     G,
                     B,
                     TAIL
+        
                   } Byte;
     
     char ColorVector[3];
@@ -30,7 +31,7 @@
     void RGB_Start(); 
     void RGB_Stop();
     void Error();
-    void ClearVector();
+    void ResetColor();   
     void UpdateColor();
     
     
