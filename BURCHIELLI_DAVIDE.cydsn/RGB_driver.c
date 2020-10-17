@@ -63,21 +63,21 @@ static char ReceivedByte = 0;
         {
            
             ReceivedByte= UART_ReadRxData();
-            sprintf(message, "BYTE: %x\r\n", ReceivedByte);
-            UART_PutString(message);
+           // sprintf(message, "BYTE: %x\r\n", ReceivedByte);
+           // UART_PutString(message);
 
             switch ( CurrentByte )
             {
                 
                 case IDLE :           
-                            UART_PutString("---DENTRO IDLE\r\n");
+                           // UART_PutString("---DENTRO IDLE\r\n");
                             switch ( ReceivedByte )
                             {
                                 case 'v':
                                         UART_PutString("RGB LED Program $$$\r\n");
                                         break;
                                 case 0xA0:
-                                            UART_PutString("HEADER RICEVUTO\r\n");
+                                           // UART_PutString("HEADER RICEVUTO\r\n");
                                             ResetColor(); 
                                             ResetTimer();
                                             Timer_1_Start();
@@ -96,25 +96,25 @@ static char ReceivedByte = 0;
                         else  
                               {
                                ColorVector[CurrentByte-1] = ReceivedByte;
-                                sprintf(message, "VECT: %d\r\n", ColorVector[CurrentByte-1]);
-                                UART_PutString(message);
+                               // sprintf(message, "VECT: %d\r\n", ColorVector[CurrentByte-1]);
+                               // UART_PutString(message);
                                CurrentByte++; 
                                if (CurrentByte == B)
                                     Timer_1_Stop();
                               }
                         break;
                 case B :
-                          UART_PutString("---DENTRO BLUE\r\n");
+                         // UART_PutString("---DENTRO BLUE\r\n");
                           if (ReceivedByte == 0xC0)
                                CurrentByte++;
                           else 
                            { 
-                            UART_PutString(" WRONG TAIL\r\n");
+                           // UART_PutString(" WRONG TAIL\r\n");
                             CurrentByte = IDLE; 
                             }
                           // break;
                 case TAIL:
-                          UART_PutString("aggiorno i colori \r\n");
+                        //  UART_PutString("aggiorno i colori \r\n");
                           UpdateColor();
                           CurrentByte = IDLE;
                             break;
