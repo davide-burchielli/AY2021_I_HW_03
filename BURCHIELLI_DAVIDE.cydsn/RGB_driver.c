@@ -27,11 +27,10 @@ static char ReceivedByte = 0;
         PWM_B_Stop();
     }
   
- void Error ()
+ void Return ()
     {
     CurrentByte = IDLE; 
     Timer_1_Stop();
-    UART_PutString(" !! Error: out of range [00 ; FF]!! \r\n");
     }
     
  void ResetColor()
@@ -61,63 +60,52 @@ static char ReceivedByte = 0;
              
      if (UART_ReadRxStatus() == UART_RX_STS_FIFO_NOTEMPTY)
         {
-           
             ReceivedByte= UART_ReadRxData();
-           // sprintf(message, "BYTE: %x\r\n", ReceivedByte);
-           // UART_PutString(message);
-
+            
             switch ( CurrentByte )
             {
-                
                 case IDLE :           
-                           // UART_PutString("---DENTRO IDLE\r\n");
                             switch ( ReceivedByte )
                             {
                                 case 'v':
-                                        UART_PutString("RGB LED Program $$$\r\n");
-                                        break;
+                                            UART_PutString("RGB LED Program $$$\r\n");
+                                            break;
                                 case 0xA0:
-                                           // UART_PutString("HEADER RICEVUTO\r\n");
                                             ResetColor(); 
                                             ResetTimer();
                                             Timer_1_Start();
                                             CurrentByte++;  
                                             break;
                                 default:
-                                        UART_PutString("!! Header non valido !!\r\n");
-                                        break;
+                                            UART_PutString("!! Error: Invalid Header !!\r\n");
+                                            break;
                             }
                             break;
                 default:
-                        //UART_PutString("---DENTRO default\r\n");
                         ResetTimer();
                         if (ReceivedByte < 0 || ReceivedByte > 255 )
-                            Error();
+                            {
+                            UART_PutString(" !! Error: out of range [00 ; FF]!! \r\n");
+                            Return();
+                            }
                         else  
                               {
                                ColorVector[CurrentByte-1] = ReceivedByte;
-                               // sprintf(message, "VECT: %d\r\n", ColorVector[CurrentByte-1]);
-                               // UART_PutString(message);
                                CurrentByte++; 
                                if (CurrentByte == B)
                                     Timer_1_Stop();
                               }
                         break;
                 case B :
-                         // UART_PutString("---DENTRO BLUE\r\n");
                           if (ReceivedByte == 0xC0)
                                CurrentByte++;
                           else 
-                           { 
-                           // UART_PutString(" WRONG TAIL\r\n");
-                            CurrentByte = IDLE; 
+                            { 
+                            UART_PutString("!! ERROR: WRONG TAIL!! \r\n");
+                            Return(); 
                             }
-                          // break;
-                case TAIL:
-                        //  UART_PutString("aggiorno i colori \r\n");
-                          UpdateColor();
-                          CurrentByte = IDLE;
-                            break;
+                        break;                
+                case TAIL: break;                       
             } 
         }
     }
@@ -125,8 +113,7 @@ static char ReceivedByte = 0;
  CY_ISR (Custom_TIMER_ISR)
     {
         UART_PutString("** TIME OUT **\r\n");
-        CurrentByte = IDLE;
-        Timer_1_Stop();
+        Return();
     }
 
 /* [] END OF FILE */

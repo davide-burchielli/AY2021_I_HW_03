@@ -30,7 +30,7 @@
     
     void RGB_Start(); 
     void RGB_Stop();
-    void Error();
+    void Return();
     void ResetColor();   
     void UpdateColor();
     

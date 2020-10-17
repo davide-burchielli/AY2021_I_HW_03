@@ -22,17 +22,13 @@ int main(void)
     extern Byte CurrentByte;
     
     
-    for(;;)  // empty infinite loop
+    for(;;) 
     {
-            //sprintf(message, "period: %x\r\n", Timer_1_ReadCounter());
-            //UART_PutString(message);
-        /*if (CurrentByte == TAIL)
+        if (CurrentByte == TAIL)
         {
-          UART_PutString("aggiorno i colori \r\n");
           UpdateColor();
           CurrentByte = IDLE;
-        }*/
-        
+        }
     }
 }
 
