@@ -1,8 +1,8 @@
-/* =========================================================================
+/* =================================================
     author: Davide Burchielli
 
-    This file declares the function Custom_TIMER_ISR and Custom_UART_ISR.
- * =========================================================================
+    This file declares the functions and the ISRs.
+ * =================================================
 */
 
 #ifndef _RGB_DRIVER_H
@@ -11,32 +11,31 @@
     #include "project.h"
     
     CY_ISR_PROTO (Custom_TIMER_ISR);
-   
     CY_ISR_PROTO (Custom_UART_ISR);
-    
-
-    
+  
+    // Enumerate the states
     typedef enum {
-                    IDLE,
-                    HEADER,
-                    R, 
-                    G,
-                    B,
-                    TAIL
-        
-                  } Byte;
+                    IDLE,   // 0
+                    HEADER, // 1
+                    RED,    // 2
+                    GREEN,  // 3
+                    BLUE,   // 4
+                    TAIL    // 5
+ 
+                  } StateEnum;
     
-    char ColorVector[3];
+    char ColorVector[3];  // ColorVector array contains the 3 colors values:
+                          // element 0 : RED
+                          // element 1 : GREEN
+                          // element 2 : BLUE
     
     void RGB_Start(); 
     void RGB_Stop();
     void Return();
-    void ResetColor();   
+    void ResetColor();  
     void UpdateColor();
-    
-    
-    
-    
+    void ResetTimer();
+
 #endif
 
 /* [] END OF FILE */
