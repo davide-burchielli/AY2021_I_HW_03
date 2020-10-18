@@ -37,9 +37,6 @@ static char ReceivedByte = 0;
     {
         for(uint8 i=0 ; i < 3; i++)
             ColorVector[i] = 0;
-        PWM_RG_WriteCompare1(ColorVector[0]);
-        PWM_RG_WriteCompare2(ColorVector[1]);
-        PWM_B_WriteCompare(ColorVector[2]);
     }
  void UpdateColor()
     {
@@ -85,20 +82,22 @@ static char ReceivedByte = 0;
                         ResetTimer();
                         if (ReceivedByte < 0 || ReceivedByte > 255 )
                             {
-                            UART_PutString(" !! Error: out of range [00 ; FF]!! \r\n");
+                            UART_PutString(" !! Error: byte out of range [00 ; FF]!! \r\n");
                             Return();
                             }
                         else  
-                              {
-                               ColorVector[CurrentByte-1] = ReceivedByte;
-                               CurrentByte++; 
-                               if (CurrentByte == B)
-                                    Timer_1_Stop();
-                              }
+                            {
+                            ColorVector[CurrentByte-1] = ReceivedByte;
+                            CurrentByte++; 
+                            }      
                         break;
                 case B :
+                          ResetTimer();
                           if (ReceivedByte == 0xC0)
-                               CurrentByte++;
+                            {
+                             CurrentByte++;
+                             Timer_1_Stop();
+                            }
                           else 
                             { 
                             UART_PutString("!! ERROR: WRONG TAIL!! \r\n");
@@ -112,8 +111,10 @@ static char ReceivedByte = 0;
     
  CY_ISR (Custom_TIMER_ISR)
     {
+        Timer_1_ReadStatusRegister();
+        
         UART_PutString("** TIME OUT **\r\n");
-        Return();
+        Return(); 
     }
 
 /* [] END OF FILE */
