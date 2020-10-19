@@ -10,7 +10,7 @@
 #include "RGB_driver.h"
 
 
-StateEnum State = 0; // Define and initialize the variable State that identify the current state.
+StateEnum State = 0; // Define and initialize the variable State which identifies the current state.
 _Bool flag = 0;     // flag variable is set = 1 by Custom_UART_ISR when a byte is recived.
 _Bool TimeOut = 0; // TimeOut variable is set = 1 by Custom_TIMER_ISR every 5 seconds.
 extern uint8_t ReceivedByte; // Global variable.
