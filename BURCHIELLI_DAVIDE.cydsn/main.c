@@ -2,7 +2,7 @@
     author: Davide Burchielli
 
     This file starts the Components and their ISRs and when a byte is received by the UART, 
-    it manages the operations.
+    it manages the operations according to the current state.
  * ==========================================================================================
 */
 
@@ -27,12 +27,12 @@ int main(void)
     isr_UART_StartEx(Custom_UART_ISR);   //Start the ISR of the UART
     
     // At power-on the RGB LED must be switch off: 
-    ResetColor(); 
+    ResetColor();
     UpdateColor();
     
     for(;;) 
     {       
-            while(!flag)  // No byte received
+            while(!flag)  // While no byte has been received
             {
                 if (TimeOut)
                 {
@@ -44,7 +44,7 @@ int main(void)
             
             switch ( State )  // One byte has been received by the UART
             {
-                case IDLE : // The program exits from the IDLE states only when the right Header byte is received          
+                case IDLE : // The program exits from the IDLE states only when the right Header byte is received (0xA0)          
                             switch ( ReceivedByte )
                             {
                                 case 'v':
@@ -80,10 +80,10 @@ int main(void)
                         break;
                 case BLUE : 
                           ResetTimer();
-                          // The program switches to the TAIL state only when the right Tail byte is received
+                          // The program switches to the TAIL state only when the right Tail byte is received (0xC0)
                           if (ReceivedByte == 0xC0)
                             {
-                             State++;
+                             State++;  //switch to TAIL state
                              Timer_1_Stop();
                             }
                           else 

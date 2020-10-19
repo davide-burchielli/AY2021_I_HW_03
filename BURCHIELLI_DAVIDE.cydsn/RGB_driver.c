@@ -16,19 +16,19 @@ extern StateEnum State;
 uint8_t ReceivedByte = 0;  // Define and initialize the variable ReceivedByte on which it is saved the byte recived
 extern _Bool flag, TimeOut;
 
- void RGB_Start() // Function that starts the PWM
+ void RGB_Start() // Function that starts PWMs
     {
         PWM_RG_Start();
         PWM_B_Start();
     }
     
- void RGB_Stop() // Function that stops the PWM
+ void RGB_Stop() // Function that stops PWMs
     {
         PWM_RG_Stop();
         PWM_B_Stop();
     }
     
- void Return () // Function used to return the IDLE state and stops the Timer
+ void Return () // Function used to return to the IDLE state and stop the Timer
     {
     State = IDLE; 
     Timer_1_Stop();
